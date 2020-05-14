@@ -6,7 +6,6 @@ module ShopifyApp
 
     included do
       before_action :check_shop_domain
-      before_action :check_shop_known
     end
 
     def current_shopify_domain
@@ -17,12 +16,9 @@ module ShopifyApp
     private
 
     def check_shop_domain
-      redirect_to(ShopifyApp.configuration.login_url) unless current_shopify_domain
-    end
-
-    def check_shop_known
-      shop = Shop.find_by(shopify_domain: current_shopify_domain)
-      redirect_to("#{ShopifyApp.configuration.login_url}?shop=#{current_shopify_domain}") unless shop
+     if current_shopify_domain.nil?
+       render(template: 'shopify_app/invalid_shop') && return
+     end
     end
   end
 end

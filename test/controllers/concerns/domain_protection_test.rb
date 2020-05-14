@@ -9,6 +9,8 @@ class DomainProtectionTest < ActionController::TestCase
     end
   end
 
+
+
   tests UnauthenticatedTestController
 
   setup do
@@ -21,17 +23,17 @@ class DomainProtectionTest < ActionController::TestCase
     Rails.application.reload_routes!
   end
 
-  test 'redirects to login if no shop param is present' do
+  test 'renders invalid_shop if shop parameter is missing' do
     get :index
 
-    assert_redirected_to ShopifyApp.configuration.login_url
+    assert_template :invalid_shop
   end
 
-  test 'redirects to login if no shop is not a valid shopify domain' do
+  test 'renders invalid_shop if shop is on an invalid domain' do
     invalid_shop = 'https://shop1.example.com'
 
     get :index, params: { shop: invalid_shop }
 
-    assert_redirected_to ShopifyApp.configuration.login_url
+    assert_template :invalid_shop
   end
 end
