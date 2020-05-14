@@ -16,9 +16,7 @@ module ShopifyApp
     private
 
     def check_shop_domain
-     if current_shopify_domain.nil?
-       render(template: 'shopify_app/invalid_shop') && return
-     end
+      redirect_to(ShopifyApp.configuration.login_url) unless current_shopify_domain
     end
   end
 end
