@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-unless Object.const_defined?('Shop')
-  class Shop
-  end
-end
-
 class DomainProtectionTest < ActionController::TestCase
   class UnauthenticatedTestController < ActionController::Base
     include ShopifyApp::DomainProtection
@@ -41,7 +36,7 @@ class DomainProtectionTest < ActionController::TestCase
   end
 
   test 'redirects to login if the shop is not installed' do
-    Shop.expects(:find_by).returns(false)
+    ShopifyApp::SessionRepository.expects(:retrieve_shop_session_by_domain).returns(false)
 
     shopify_domain = 'shop1.myshopify.com'
 
@@ -51,7 +46,7 @@ class DomainProtectionTest < ActionController::TestCase
   end
 
   test 'returns :ok if the shop is installed' do
-    Shop.expects(:find_by).returns(true)
+    ShopifyApp::SessionRepository.expects(:retrieve_shop_session_by_domain).returns(true)
 
     shopify_domain = 'shop1.myshopify.com'
 

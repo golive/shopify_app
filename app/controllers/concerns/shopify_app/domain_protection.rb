@@ -21,7 +21,7 @@ module ShopifyApp
     end
 
     def check_shop_known
-      @shop = Shop.find_by(shopify_domain: @shopify_domain)
+      @shop = SessionRepository.retrieve_shop_session_by_domain(current_shopify_domain)
       redirect_to("#{ShopifyApp.configuration.login_url}?shop=#{@shopify_domain}") unless @shop
     end
   end
